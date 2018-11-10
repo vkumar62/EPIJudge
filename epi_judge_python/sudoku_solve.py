@@ -6,10 +6,47 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
-
+import math
 def solve_sudoku(partial_assignment):
     # TODO - you fill in here.
-    return True
+    def solve_helper(i, j):
+        if j == N:
+            i = i+1
+            j = 0
+            if i == N:
+                # All complete
+                return True
+        if partial_assignment[i][j] != 0:
+            return solve_helper(i, j+1)
+
+        for val in range(1, N+1):
+            if valid_assign(i,j,val):
+                partial_assignment[i][j] = val
+                if solve_helper(i, j+1):
+                    return True
+        #no valid assignments found, backtrack
+        partial_assignment[i][j] = 0
+        return False
+
+    def valid_assign(x, y, val):
+        #Check if val can be assigned at i,j
+        #col check
+        for j in range(N):
+            if partial_assignment[x][j] == val:
+                return False
+        for i in range(N):
+            if partial_assignment[i][y] == val:
+                return False
+        #grid check
+        for i in range((x//sqrt_n) * sqrt_n, (x//sqrt_n) * sqrt_n + sqrt_n):
+            for j in range((y//sqrt_n)*sqrt_n, (y//sqrt_n)*sqrt_n+sqrt_n):
+                if partial_assignment[i][j] == val:
+                    return False
+        return True
+
+    N = len(partial_assignment)
+    sqrt_n = int(math.sqrt(N))
+    return solve_helper(0,0)
 
 
 def assert_unique_seq(seq):

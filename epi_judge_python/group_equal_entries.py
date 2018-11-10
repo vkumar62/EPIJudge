@@ -7,9 +7,59 @@ from test_framework.test_utils import enable_executor_hook
 
 Person = collections.namedtuple('Person', ('age', 'name'))
 
-
+import pdb
 def group_by_age(people):
     # TODO - you fill in here.
+#    pdb.set_trace()
+    MAX_AGE = 10000
+    order = []
+    age_count = [0] * MAX_AGE
+    offsets = [-1] * MAX_AGE
+    result = [None] * len(people)
+
+    for person in people:
+        if age_count[person.age] == 0:
+            order.append(person.age)
+        age_count[person.age] += 1
+
+    offset = 0
+    for age in order:
+        offsets[age] = offset
+        offset += age_count[age]
+
+    for person in people:
+        age = person.age
+        result[offsets[age]] = person
+        offsets[age] += 1
+
+    people.clear()
+    people.extend(result)
+    return
+
+# Using only one array extra space
+def group_by_age(people):
+    # TODO - you fill in here.
+#    pdb.set_trace()
+    MAX_AGE = 10000
+    order = []
+    age_count = [0] * MAX_AGE
+    result = [None] * len(people)
+
+    for person in people:
+        if age_count[person.age] == 0:
+            order.append(person.age)
+        age_count[person.age] += 1
+
+    for i in range(1, len(age_count)):
+        age_count[i] += age_count[i-1] 
+
+    for person in people:
+        age = person.age
+        result[age_count[age] - 1] = person
+        age_count[age] -= 1
+
+    people.clear()
+    people.extend(result)
     return
 
 
@@ -36,6 +86,7 @@ def group_by_age_wrapper(executor, people):
 
     for x in people:
         if x.age in ages:
+            pdb.set_trace()
             raise TestFailure('Entries are not grouped by age')
         if last_age != x.age:
             ages.add(last_age)

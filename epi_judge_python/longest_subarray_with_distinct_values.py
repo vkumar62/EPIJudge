@@ -1,9 +1,20 @@
 from test_framework import generic_test
 
-
+import pdb
 def longest_subarray_with_distinct_entries(A):
     # TODO - you fill in here.
-    return 0
+    prev_index = dict()
+    max_len = 0
+    start_idx = 0
+
+    for i, a in enumerate(A):
+        if a in prev_index:
+            if prev_index[a] >= start_idx:
+                max_len = max(max_len, i - start_idx)
+                start_idx = prev_index[a] + 1
+        prev_index[a] = i
+
+    return max(max_len, len(A) - start_idx)
 
 
 if __name__ == '__main__':

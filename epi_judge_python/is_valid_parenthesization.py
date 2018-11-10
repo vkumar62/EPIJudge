@@ -1,9 +1,18 @@
 from test_framework import generic_test
 
-
+import pdb
 def is_well_formed(s):
     # TODO - you fill in here.
-    return True
+    MATCHING = { '}':'{', ']':'[', ')':'('}
+    parens = []
+
+#    pdb.set_trace()
+    for c in s:
+        if c not in MATCHING:
+            parens.append(c)
+        elif not parens or parens.pop() != MATCHING[c]:
+            return False
+    return len(parens) == 0
 
 
 if __name__ == '__main__':

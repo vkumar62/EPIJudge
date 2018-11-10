@@ -11,9 +11,28 @@ class BinaryTreeNode:
         self.right = None
         self.next = None  # Populates this field.
 
-
+from collections import deque
 def construct_right_sibling(tree):
     # TODO - you fill in here.
+    # Do a BFS
+    if not tree:
+        return
+
+    q = deque([tree])
+    
+    while q:
+        next_q = deque()
+        while q:
+            node = q.popleft()
+            if q:
+                node.next = q[0]
+
+            if node.left:
+                next_q.append(node.left)
+            if node.right:
+                next_q.append(node.right)
+        q = next_q
+
     return
 
 

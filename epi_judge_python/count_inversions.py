@@ -1,9 +1,17 @@
+from sortedcontainers import SortedList
 from test_framework import generic_test
 
 
 def count_inversions(A):
     # TODO - you fill in here.
-    return 0
+    s = SortedList()
+
+    inversions = 0
+
+    for num in A:
+        inversions += len(s) - s.bisect(num)
+        s.add(num)
+    return inversions
 
 
 if __name__ == '__main__':

@@ -9,9 +9,31 @@ Endpoint = collections.namedtuple('Endpoint', ('is_closed', 'val'))
 Interval = collections.namedtuple('Interval', ('left', 'right'))
 
 
+# is_closed means interval includes the endpoint value. So closed_left < open_left and open_right < closed_right
 def union_of_intervals(intervals):
     # TODO - you fill in here.
-    return []
+    intervals.sort(key = lambda k: (k.left.val, not k.left.is_closed))
+
+    result = [intervals[0]]
+
+    for interval in intervals[1:]:
+        if interval.left.val < result[-1].right.val or \
+           (interval.left.val == result[-1].right.val and \
+                   (interval.left.is_closed or result[-1].right.is_closed)):
+            '''
+            result[-1] = Interval(Endpoint(interval.left.is_closed or result[-1].left.is_closed,
+                                           min(interval.left.val, result[-1].left.val)),
+                                  Endpoint(interval.right.is_closed or result[-1].right.is_closed,
+                                           max(interval.right.val, result[-1].right.val)))
+            '''
+            if (interval.right.val > result[-1].right.val or \
+                    (interval.right.val == result[-1].right.val and interval.right.is_closed)):
+                result[-1] = Interval(result[-1].left, interval.right)
+
+        else:
+            result.append(interval)
+
+    return result
 
 
 @enable_executor_hook

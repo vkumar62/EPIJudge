@@ -2,21 +2,50 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 
 
+import pdb
 class Stack:
+    def __init__(self):
+        self.stack = []
+        self.max_element_stack = []
+        self.debug = False
+
     def empty(self):
         # TODO - you fill in here.
-        return True
+        return len(self.stack) == 0
 
     def max(self):
+        if self.debug:
+            pdb.set_trace()
         # TODO - you fill in here.
-        return 0
+        if self.max_element_stack:
+            return self.max_element_stack[-1][0]
+        return float('-inf')
 
     def pop(self):
         # TODO - you fill in here.
-        return 0
+        if self.debug:
+            pdb.set_trace()
+        item = self.stack.pop()
+        if item == self.max():
+            m, c = self.max_element_stack[-1]
+            c -= 1
+            if c == 0:
+                self.max_element_stack.pop()
+            else:
+                self.max_element_stack[-1] = (m, c)
+        return item
 
     def push(self, x):
+        if self.debug:
+            pdb.set_trace()
         # TODO - you fill in here.
+        self.stack.append(x)
+        if x > self.max():
+            self.max_element_stack.append((x, 1))
+        elif x == self.max():
+            m, c = self.max_element_stack[-1]
+            c += 1
+            self.max_element_stack[-1] = (m, c)
         return
 
 

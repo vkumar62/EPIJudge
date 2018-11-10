@@ -5,11 +5,18 @@ from test_framework.binary_tree_utils import (binary_tree_height,
                                               generate_inorder)
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
+from binary_tree_node import BinaryTreeNode
 
 
 def build_min_height_bst_from_sorted_array(A):
     # TODO - you fill in here.
-    return None
+    def helper(left, right):
+        if left > right:
+            return None
+        mid = (left + right)//2
+        return BinaryTreeNode(A[mid], 
+                helper(left, mid-1), helper(mid+1, right))
+    return helper(0, len(A)-1)
 
 
 @enable_executor_hook

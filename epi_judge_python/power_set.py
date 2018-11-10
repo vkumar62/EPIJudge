@@ -3,7 +3,16 @@ from test_framework import generic_test, test_utils
 
 def generate_power_set(S):
     # TODO - you fill in here.
-    return []
+    def power_set(offset, partial):
+        if offset == len(S):
+            results.append(partial)
+            return
+        power_set(offset+1, partial)
+        power_set(offset+1, partial + [S[offset]])
+
+    results = []
+    power_set(0, [])
+    return results
 
 
 if __name__ == '__main__':

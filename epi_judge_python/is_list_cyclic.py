@@ -5,10 +5,48 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
+import pdb
 def has_cycle(head):
+#    pdb.set_trace()
     # TODO - you fill in here.
+    slow, fast = head, head
+
+    while fast and fast.next and fast.next.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            slow = head
+            while slow is not fast:
+                slow, fast = slow.next, fast.next
+            return slow
+        
     return None
 
+
+def has_cycle(head):
+    slow = fast = head
+
+    while fast and fast.next and fast.next.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            break
+
+    if slow is not fast:
+        return None
+
+    cycle_count = 1 
+    while slow is not fast.next:
+        cycle_count += 1
+        fast = fast.next
+
+    slow = fast = head
+    for _ in range(cycle_count):
+        fast = fast.next
+
+    while slow is not fast:
+        slow, fast = slow.next, fast.next
+    return slow
 
 @enable_executor_hook
 def has_cycle_wrapper(executor, head, cycle_idx):

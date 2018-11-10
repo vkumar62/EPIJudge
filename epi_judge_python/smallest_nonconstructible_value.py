@@ -3,7 +3,12 @@ from test_framework import generic_test
 
 def smallest_nonconstructible_value(A):
     # TODO - you fill in here.
-    return 0
+    max_construct = 0
+    for a in sorted(A):
+        if a > max_construct + 1:
+            break
+        max_construct += a
+    return max_construct + 1
 
 
 if __name__ == '__main__':

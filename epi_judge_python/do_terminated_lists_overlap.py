@@ -4,10 +4,31 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
-
+import pdb
 def overlapping_no_cycle_lists(l0, l1):
     # TODO - you fill in here.
-    return None
+    def listlen(L):
+        c = 0
+        while L:
+            c += 1
+            L = L.next
+        return c
+
+    len0, len1 = listlen(l0), listlen(l1)
+
+    if len0 > len1:
+        len1, len0 = len0, len1
+        l1, l0 = l0, l1
+
+    t0, t1 = l0, l1
+
+    for _ in range(len1-len0):
+        t1 = t1.next
+
+    while t0 and t1 and t0 is not t1:
+        t0, t1 = t0.next, t1.next
+
+    return t0
 
 
 @enable_executor_hook
